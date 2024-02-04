@@ -1,0 +1,14 @@
+checkpoint/elephant/*
+checkpoint/fox/*
+checkpoint/tiger/*
+checkpoint/musk1/*
+checkpoint/musk2/*
+checkpoint/messidor/*
+
+data/ColonCancer
+
+logs/*
+
+settings_old.yaml
+
+main_flv.py
