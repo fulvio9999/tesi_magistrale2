@@ -35,6 +35,14 @@ Data:
         nesterov: False
         criterion: neg-log-likelihood
         ckpt_dir: checkpoint/elephant/attnet
+      flvnet:
+        lr: 0.0001
+        weight_decay: 0.005
+        momentum: 0.9
+        nesterov: False
+        criterion: binary-cross-entropy
+        ckpt_dir: checkpoint/elephant/flvnet
+        pooling_mode: max #max, lse, ave
   fox:
     input_dim: 230
     path: data\\fox_100x100_matlab.mat

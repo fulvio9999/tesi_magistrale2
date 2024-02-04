@@ -29,6 +29,8 @@ class TemplateModel():
         self.log_per_step = None
         # self.eval_per_epoch = None
 
+        # self.best_model = None
+
     def check_init(self):
         assert self.model
         assert self.optimizer
@@ -104,7 +106,7 @@ class TemplateModel():
         y = y[0] #BYFLV
         x = x.to(self.device)
         y = y.to(self.device)
-        pred = self.model(x)
+        pred, _ = self.model(x)
         loss = self.criterion(pred, y)
 
         return loss, None
@@ -116,6 +118,7 @@ class TemplateModel():
 
         if error < self.best_error:
             self.best_error = error
+            # self.best_model = self.model
             self.save_state(osp.join(self.ckpt_dir, 'best.pth.tar'), False)
         self.save_state(osp.join(self.ckpt_dir, '{}.pth.tar'.format(self.epoch)))
 
@@ -136,7 +139,7 @@ class TemplateModel():
             y = y[0] #BYFLV
             x = x.to(self.device)
             y = y.to(self.device)
-            pred = self.model(x)
+            pred, _ = self.model(x)
 
             # xs.append(x.cpu())
             # ys.append(y.cpu())
@@ -153,7 +156,7 @@ class TemplateModel():
 
     def inference(self, x):
         x = x.to(self.device)
-        return self.model(x)
+        return self.model(x)[0]
 
     def num_parameters(self):
         return sum([p.data.nelement() for p in self.model.parameters()])

@@ -21,8 +21,9 @@ class MiNet(nn.Module):
         x = F.relu(self.fc3(x))
         x = self.dropout(x)
 
-        Y_prob = self.score_pooling(x).squeeze()
+        Y_prob, emb = self.score_pooling(x)
+        Y_prob, emb = Y_prob.squeeze(), emb.squeeze() 
         # Y_hat = torch.ge(Y_prob, 0.5).float()
 
-        return Y_prob
+        return Y_prob, emb
     

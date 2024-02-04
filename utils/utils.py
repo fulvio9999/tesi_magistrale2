@@ -30,12 +30,14 @@ class Score_pooling(nn.Module):
     def forward(self, x):
         if self.net == 'MInet':
             x = self.choice_pooling(x)
+            emb = x
 
         x = self.fc(x)
         output = torch.sigmoid(x)
 
         if self.net == 'minet':
             output = self.choice_pooling(output)
+            emb = None
 
         # if self.net == 'minet':
         #     x = self.fc(x)
@@ -45,4 +47,4 @@ class Score_pooling(nn.Module):
         #     x = self.choice_pooling(x)
         #     x = self.fc(x)
         #     output = torch.sigmoid(x)
-        return output
+        return output, emb
