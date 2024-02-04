@@ -1,13 +1,13 @@
-# checkpoint/elephant/*
-# checkpoint/fox/*
-# checkpoint/tiger/*
-# checkpoint/musk1/*
-# checkpoint/musk2/*
-# checkpoint/messidor/*
+checkpoint/elephant/*
+checkpoint/fox/*
+checkpoint/tiger/*
+checkpoint/musk1/*
+checkpoint/musk2/*
+checkpoint/messidor/*
 
 data/ColonCancer
 
-# logs/*
+logs/*
 
 settings_old.yaml
 
