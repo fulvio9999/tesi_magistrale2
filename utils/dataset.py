@@ -3,6 +3,7 @@ import torch
 import scipy.io
 from sklearn.model_selection import KFold
 from utils.utils import read_yaml
+import os.path as osp
 
 def create_bags_mat(data):
     ids=data['bag_ids'][0]
@@ -68,7 +69,8 @@ def load_dataset(args, seed):
     cfg = read_yaml(args.config)
     assert args.dataset in cfg.Data.keys()
 
-    path = cfg.Data[args.dataset].path
+    # path = cfg.Data[args.dataset].path
+    path = osp.join(cfg.General.data_dir, cfg.Data[args.dataset].path)
     data = scipy.io.loadmat(path)
     if args.dataset in ('musk1', 'musk2', 'messidor'):
         return load_musk_messidor(args, data, seed)

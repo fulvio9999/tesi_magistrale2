@@ -2,10 +2,12 @@ import argparse
 import csv
 import torch
 import numpy as np
+import os.path as osp
+import os
 
 from template.model import Model
 from utils.dataset import convertToBatch, load_dataset
-from utils.utils import read_yaml, save_results
+from utils.utils import load_checkpoint, read_yaml, save_checkpoint, save_results
 
 # Training settings
 parser = argparse.ArgumentParser(description='FLV')
@@ -38,12 +40,16 @@ if args.cuda:
     torch.cuda.manual_seed(seed)
     print('\nGPU is ON!')
 
+ckpt_dir = cfg.Data[args.dataset].Models[args.model].ckpt_dir
+ckpt_file = osp.join(ckpt_dir, 'accs.tar')
+
 if __name__ == "__main__":   
-    accs = np.zeros((args.run, args.folds), dtype=float)
+    # accs = np.zeros((args.run, args.folds), dtype=float)
+    accs, curr_run, curr_fold = load_checkpoint(args.run, args.folds, ckpt_file)
     seeds = [seed+i*5 for i in range(args.run)]
-    for irun in range(args.run):
+    for irun in range(curr_run, args.run):
         dataset = load_dataset(args, seeds[irun])
-        for ifold in range(args.folds):
+        for ifold in range(curr_fold, args.folds):
             print(f"\nRUN {irun+1}/{args.run}\t FOLD {ifold+1}/{args.folds}: ----------------------------------------")
             args.train_loader = convertToBatch(dataset[ifold]['train'])
             args.test_loader = convertToBatch(dataset[ifold]['test'])
@@ -53,9 +59,12 @@ if __name__ == "__main__":
                 model.train()
             best_model = model.get_best_model()
             accs[irun][ifold] = 1 - best_model.eval_error()[0]
+            save_checkpoint(accs, irun, ifold, args.folds, ckpt_file)
+        curr_fold = 0
 
     print('\n\nDone!!!')
     print('FINAL: mean accuracy = ', np.mean(accs))
     print('FINAL: std = ', np.std(accs))
 
+    os.remove(ckpt_file)
     save_results(accs, cfg.General.results_dir, args.dataset, args.model)

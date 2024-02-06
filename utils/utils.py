@@ -7,6 +7,7 @@ import numpy as np
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
+import os.path as osp
 
 def read_yaml(fpath=None):
     with open(fpath, mode="r") as file:
@@ -30,8 +31,8 @@ def save_results(accuracy_matrix, results_dir, dataset, model):
     final_matrix = np.column_stack((accuracy_matrix_with_fold_std, run_std))
     column_labels = [f"Fold_{i+1}" for i in range(accuracy_matrix.shape[1])] + ["Acc_run_mean", "Acc_run_std"]
 
-    path = results_dir + '/' + dataset + '/'
-    csv_file_path =  path + model + '.csv'
+    path = osp.join(results_dir, dataset)
+    csv_file_path = osp.join(path, model+".csv")
     with open(csv_file_path, 'w', newline='') as csvfile:
         writer = csv.writer(csvfile)
         writer.writerow(column_labels)
@@ -44,12 +45,34 @@ def save_results(accuracy_matrix, results_dir, dataset, model):
     
     acc_mean = np.round(np.mean(accuracy_matrix), 3)
     acc_std = np.round(np.std(accuracy_matrix), 3)
-    txt_file_path =  path + model + '.txt'
+
+    txt_file_path = osp.join(path, model+".txt")
     with open(txt_file_path, "w") as file:
         file.write(f"ACCURACY MEAN: {acc_mean}\nACCURACY STD: {acc_std}")
 
     print(f"\nI dati sono stati scritti con successo nei file: \nCSV = {csv_file_path}\nTXT = {txt_file_path}")
 
+def load_checkpoint(run, folds, ckpt_file):
+    if not osp.exists(ckpt_file):
+        return np.zeros((run, folds), dtype=float), 0, 0
+    state = torch.load(ckpt_file)
+    accs = state['accs']
+    curr_run = state['curr_run']
+    curr_fold = state['curr_fold']
+    print('load accuracy checkpoint from {}'.format(ckpt_file))
+    return accs, curr_run, curr_fold
+
+def save_checkpoint(accs, curr_run, curr_fold, folds, ckpt_file):
+    state = {}
+    if curr_fold == folds-1:
+        state['curr_run'] = curr_run+1
+        state['curr_fold'] = 0
+    else:
+        state['curr_run'] = curr_run
+        state['curr_fold'] = curr_fold+1
+    state['accs'] = accs
+    torch.save(state, ckpt_file)
+    print('save accuracy checkpoint at {}'.format(ckpt_file))
     
 class Score_pooling(nn.Module):
     def __init__(self, input_dim=64, output_dim=1, pooling_mode='max', net='minet'):

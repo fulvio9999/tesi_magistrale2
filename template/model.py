@@ -39,9 +39,7 @@ class Model(TemplateModel):
         seed = cfg.General.seed
         # np.random.seed(seed)
         torch.manual_seed(seed)
-        if args.cuda:
-            torch.cuda.manual_seed(seed)
-            print('\nGPU is ON!')
+        torch.cuda.manual_seed(seed)
 
         self.writer = tX.SummaryWriter(log_dir=cfg.General.log_dir, comment=args.model)
         self.train_logger = None
@@ -70,7 +68,7 @@ class Model(TemplateModel):
         self.eval_per_epoch = args.eval_per_epoch
 
         # self.best_model_path = cfg.Models[args.model].ckpt_dir + '/best.pth.tar'
-        self.best_model_path = cfg.Data[args.dataset].Models[args.model].ckpt_dir + '/best.pth.tar'
+        self.best_model_path = osp.join(cfg.Data[args.dataset].Models[args.model].ckpt_dir, 'best.pth.tar')
 
         self.check_init()
 
@@ -147,9 +145,7 @@ class Model_with_embs(TemplateModel):
         seed = cfg.General.seed
         # np.random.seed(seed)
         torch.manual_seed(seed)
-        if args.cuda:
-            torch.cuda.manual_seed(seed)
-            print('\nGPU is ON!')
+        torch.cuda.manual_seed(seed)
 
         self.writer = tX.SummaryWriter(log_dir=cfg.General.log_dir, comment=args.model)
         self.train_logger = None
@@ -179,7 +175,7 @@ class Model_with_embs(TemplateModel):
         self.eval_per_epoch = args.eval_per_epoch
 
         # self.best_model_path = cfg.Models[args.model].ckpt_dir + '/best.pth.tar'
-        self.best_model_path = cfg.Data[args.dataset].Models[args.model].ckpt_dir + '/best.pth.tar'
+        self.best_model_path = osp.join(cfg.Data[args.dataset].Models[args.model].ckpt_dir, 'best.pth.tar')
 
         self.check_init()
     

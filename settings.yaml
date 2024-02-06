@@ -7,11 +7,12 @@ General:
   seed: 1
   batch_size: 1
   results_dir: results
+  data_dir: data
 
 Data:
   elephant:
     input_dim: 230
-    path: data\\elephant_100x100_matlab.mat
+    path: elephant_100x100_matlab.mat
     Models:
       minet:
         lr: 0.0001
@@ -46,7 +47,7 @@ Data:
         pooling_mode: max #max, lse, ave
   fox:
     input_dim: 230
-    path: data\\fox_100x100_matlab.mat
+    path: fox_100x100_matlab.mat
     Models:
       minet:
         lr: 0.0001
@@ -81,7 +82,7 @@ Data:
         pooling_mode: max #max, lse, ave
   tiger:
     input_dim: 230
-    path: data\\tiger_100x100_matlab.mat
+    path: tiger_100x100_matlab.mat
     Models:
       minet:
         lr: 0.0005
@@ -116,7 +117,7 @@ Data:
         pooling_mode: max #max, lse, ave
   musk1:
     input_dim: 166
-    path: data\\musk1.mat
+    path: musk1.mat
     Models:
       minet:
         lr: 0.0005
@@ -151,7 +152,7 @@ Data:
         pooling_mode: max #max, lse, ave
   musk2:
     input_dim: 166
-    path: data\\musk2.mat
+    path: musk2.mat
     Models:
       minet:
         lr: 0.0005
@@ -186,7 +187,7 @@ Data:
         pooling_mode: max #max, lse, ave
   messidor:
     input_dim: 687
-    path: data\\messidor.mat
+    path: messidor.mat
     Models:
       minet:
         lr: 0.0005
