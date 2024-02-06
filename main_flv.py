@@ -1,19 +1,12 @@
 import argparse
 import copy
-import torch.nn as nn
-import torch.nn.functional as F
-import torch.optim as optim
-from torch.autograd import Variable
 import torch
 
 import numpy as np
-from torch.utils.data import Dataset, DataLoader
-from sklearn.model_selection import StratifiedKFold
 
 from template.model import Model, Model_with_embs
 from utils.dataset import convertToBatch, create_bags_mat, load_dataset
-from utils.utils import read_yaml
-
+from utils.utils import read_yaml, save_results
 
 # Training settings
 parser = argparse.ArgumentParser(description='FLV')
@@ -28,7 +21,7 @@ parser.add_argument('--run', type=int, default=5, metavar='N',
 parser.add_argument('--no-cuda', action='store_true', default=True,
                     help='disables CUDA training')
 parser.add_argument('--config', default='settings.yaml',type=str)
-parser.add_argument('--model', type=str, default='MInet', help='Choose b/w minet, MInet, attnet')
+parser.add_argument('--model', type=str, default='MI_net', help='Choose b/w minet, MI_net, attnet')
 parser.add_argument('--dataset', type=str, default='elephant', help='Choose b/w elephant, fox, tiger, musk1, musk2, messidor')
 parser.add_argument('--eval-per-epoch', type=int, default=0, 
                     help='Choose 0 if you do not want to save the best model, otherwise choose the number of times per epoch you want to save the best model')
@@ -83,7 +76,8 @@ if __name__ == "__main__":
     print('\nFINAL: mean accuracy = ', np.mean(accs))
     print('FINAL: std = ', np.std(accs))
             
-
+    save_results(accs_base, cfg.General.results_dir, args.dataset, args.model)
+    save_results(accs, cfg.General.results_dir, args.dataset, 'flvnet')
 
     
 

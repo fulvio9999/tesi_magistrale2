@@ -1,10 +1,17 @@
+import torch
 import torch.nn as nn
 import torch.nn.functional as F
 from utils.utils import Score_pooling
 
 class MiNet(nn.Module):
-    def __init__(self, input_dim, output_dim=1, pooling_mode='max'):
+    def __init__(self, cfg, input_dim, output_dim=1, pooling_mode='max'):
         super(MiNet, self).__init__()
+
+        seed = cfg.General.seed
+        # np.random.seed(seed)
+        torch.manual_seed(seed)
+        torch.cuda.manual_seed(seed)
+
         self.dim_emb = 64
         self.fc1 = nn.Linear(input_dim, 256)
         self.fc2 = nn.Linear(256, 128)
@@ -22,7 +29,8 @@ class MiNet(nn.Module):
         x = self.dropout(x)
 
         Y_prob, emb = self.score_pooling(x)
-        Y_prob, emb = Y_prob.squeeze(), emb.squeeze() 
+        Y_prob = Y_prob.squeeze()
+        # Y_prob, emb = Y_prob.squeeze(), emb.squeeze() 
         # Y_hat = torch.ge(Y_prob, 0.5).float()
 
         return Y_prob, emb

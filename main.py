@@ -1,11 +1,11 @@
 import argparse
-import copy
+import csv
 import torch
 import numpy as np
 
 from template.model import Model
 from utils.dataset import convertToBatch, load_dataset
-from utils.utils import read_yaml
+from utils.utils import read_yaml, save_results
 
 # Training settings
 parser = argparse.ArgumentParser(description='FLV')
@@ -20,7 +20,7 @@ parser.add_argument('--run', type=int, default=5, metavar='N',
 parser.add_argument('--no-cuda', action='store_true', default=True,
                     help='disables CUDA training')
 parser.add_argument('--config', default='settings.yaml',type=str)
-parser.add_argument('--model', type=str, default='minet', help='Choose b/w minet, MInet, attnet')
+parser.add_argument('--model', type=str, default='minet', help='Choose b/w minet, MI_net, attnet')
 parser.add_argument('--dataset', type=str, default='elephant', help='Choose b/w elephant, fox, tiger, musk1, musk2, messidor')
 parser.add_argument('--eval-per-epoch', type=int, default=0, 
                     help='Choose 0 if you do not want to save the best model, otherwise choose the number of times per epoch you want to save the best model')
@@ -51,10 +51,11 @@ if __name__ == "__main__":
             model = Model(args)
             for e in range(args.epochs):
                 model.train()
-            # accs[irun][ifold] = model.test_best_model()
             best_model = model.get_best_model()
             accs[irun][ifold] = 1 - best_model.eval_error()[0]
 
     print('\n\nDone!!!')
     print('FINAL: mean accuracy = ', np.mean(accs))
     print('FINAL: std = ', np.std(accs))
+
+    save_results(accs, cfg.General.results_dir, args.dataset, args.model)

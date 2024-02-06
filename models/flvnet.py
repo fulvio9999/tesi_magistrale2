@@ -1,12 +1,18 @@
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-
+from models.MI_net import MINet
 from utils.utils import Score_pooling
 
 class FLV(nn.Module):
-    def __init__(self, input_dim, base_model, output_dim=1, num_references=100, pooling_mode='max'):
+    def __init__(self, cfg, input_dim, base_model, output_dim=1, num_references=100, pooling_mode='max'):
         super(FLV, self).__init__()
+
+        seed = cfg.General.seed
+        # np.random.seed(seed)
+        torch.manual_seed(seed)
+        torch.cuda.manual_seed(seed)
+
         self.dim_emb = 64
         self.fc1 = nn.Linear(input_dim, 256)
         self.fc2 = nn.Linear(256, 128)
@@ -26,9 +32,9 @@ class FLV(nn.Module):
         emb2 = self.calculate_embedding3(x).unsqueeze(0) #1x64
         tr_bags_tensor = torch.stack(tr_bags, dim=0) #num_refs x 64
 
-        # emb2 = self.self_att(emb, tr_bags_tensor)[0] #1x64
-        # emb2 = self.self_att(emb2, tr_bags_tensor)[0]
-        # emb2 = self.self_att(emb2, tr_bags_tensor)[0]
+        emb2 = self.self_att(emb2, tr_bags_tensor)[0] #1x64
+        emb2 = self.self_att(emb2, tr_bags_tensor)[0]
+        emb2 = self.self_att(emb2, tr_bags_tensor)[0]
 
         Y_prob = torch.sigmoid(self.fc(emb2)).squeeze()
         return Y_prob, emb2

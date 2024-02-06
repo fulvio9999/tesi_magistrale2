@@ -3,8 +3,14 @@ import torch.nn as nn
 import torch.nn.functional as F
 
 class Attnet(nn.Module):
-    def __init__(self, input_dim):
+    def __init__(self, cfg, input_dim):
         super(Attnet, self).__init__()
+
+        seed = cfg.General.seed
+        # np.random.seed(seed)
+        torch.manual_seed(seed)
+        torch.cuda.manual_seed(seed)
+
         self.FC1 = 256
         self.FC2 = 128
         self.FC3 = 64

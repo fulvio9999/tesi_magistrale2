@@ -6,6 +6,7 @@ General:
   log_per_step: 1000
   seed: 1
   batch_size: 1
+  results_dir: results
 
 Data:
   elephant:
@@ -20,7 +21,7 @@ Data:
         criterion: binary-cross-entropy
         ckpt_dir: checkpoint/elephant/minet
         pooling_mode: max #max, lse, ave
-      MInet:
+      MI_net:
         lr: 0.0001
         weight_decay: 0.005
         momentum: 0.9
@@ -55,7 +56,7 @@ Data:
         criterion: binary-cross-entropy
         ckpt_dir: checkpoint/fox/minet
         pooling_mode: max #max, lse, ave
-      MInet:
+      MI_net:
         lr: 0.0001
         weight_decay: 0.01
         momentum: 0.9
@@ -70,6 +71,14 @@ Data:
         nesterov: False
         criterion: neg-log-likelihood
         ckpt_dir: checkpoint/fox/attnet
+      flvnet:
+        lr: 0.0005
+        weight_decay: 0.005
+        momentum: 0.9
+        nesterov: False
+        criterion: binary-cross-entropy
+        ckpt_dir: checkpoint/fox/flvnet
+        pooling_mode: max #max, lse, ave
   tiger:
     input_dim: 230
     path: data\\tiger_100x100_matlab.mat
@@ -82,7 +91,7 @@ Data:
         criterion: binary-cross-entropy
         ckpt_dir: checkpoint/tiger/minet
         pooling_mode: max #max, lse, ave
-      MInet:
+      MI_net:
         lr: 0.0005
         weight_decay: 0.005
         momentum: 0.9
@@ -97,6 +106,14 @@ Data:
         nesterov: False
         criterion: neg-log-likelihood
         ckpt_dir: checkpoint/tiger/attnet
+      flvnet:
+        lr: 0.0001
+        weight_decay: 0.01
+        momentum: 0.9
+        nesterov: False
+        criterion: binary-cross-entropy
+        ckpt_dir: checkpoint/tiger/flvnet
+        pooling_mode: max #max, lse, ave
   musk1:
     input_dim: 166
     path: data\\musk1.mat
@@ -109,7 +126,7 @@ Data:
         criterion: binary-cross-entropy
         ckpt_dir: checkpoint/musk1/minet
         pooling_mode: max #max, lse, ave
-      MInet:
+      MI_net:
         lr: 0.0005
         weight_decay: 0.005
         momentum: 0.9
@@ -124,6 +141,14 @@ Data:
         nesterov: False
         criterion: neg-log-likelihood
         ckpt_dir: checkpoint/musk1/attnet
+      flvnet:
+        lr: 0.0005
+        weight_decay: 0.005
+        momentum: 0.9
+        nesterov: False
+        criterion: binary-cross-entropy
+        ckpt_dir: checkpoint/musk1/flvnet
+        pooling_mode: max #max, lse, ave
   musk2:
     input_dim: 166
     path: data\\musk2.mat
@@ -136,7 +161,7 @@ Data:
         criterion: binary-cross-entropy
         ckpt_dir: checkpoint/musk2/minet
         pooling_mode: max #max, lse, ave
-      MInet:
+      MI_net:
         lr: 0.0005
         weight_decay: 0.03
         momentum: 0.9
@@ -151,6 +176,14 @@ Data:
         nesterov: False
         criterion: neg-log-likelihood
         ckpt_dir: checkpoint/musk2/attnet
+      flvnet:
+        lr: 0.0005
+        weight_decay: 0.03
+        momentum: 0.9
+        nesterov: False
+        criterion: binary-cross-entropy
+        ckpt_dir: checkpoint/musk2/flvnet
+        pooling_mode: max #max, lse, ave
   messidor:
     input_dim: 687
     path: data\\messidor.mat
@@ -163,7 +196,7 @@ Data:
         criterion: binary-cross-entropy
         ckpt_dir: checkpoint/messidor/minet
         pooling_mode: max #max, lse, ave
-      MInet:
+      MI_net:
         lr: 0.0005
         weight_decay: 0.001
         momentum: 0.9
@@ -179,3 +212,11 @@ Data:
         criterion: neg-log-likelihood
         ckpt_dir: checkpoint/messidor/attnet
         # weight_std: 0.05
+      flvnet:
+        lr: 0.0005
+        weight_decay: 0.001
+        momentum: 0.9
+        nesterov: False
+        criterion: binary-cross-entropy
+        ckpt_dir: checkpoint/messidor/flvnet
+        pooling_mode: max #max, lse, ave
