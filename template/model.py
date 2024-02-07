@@ -4,6 +4,7 @@ from models.flvnet import FLV
 from models.attnet import Attnet
 from models.MI_net import MINet
 from models.minet import MiNet
+from models.sa_abmilp import SA_ABMILP
 from template.template import TemplateModel
 import tensorboardX as tX
 from utils.utils import read_yaml
@@ -75,7 +76,7 @@ class Model(TemplateModel):
     def get_model(self, cfg):
         model_name = self.args.model
         dataset_params = cfg.Data[self.args.dataset]
-        assert model_name in ('minet', 'MI_net', 'attnet', 'flvnet')
+        assert model_name in ('minet', 'MI_net', 'attnet', 'sa_abmilp')
 
         input_dim = dataset_params.input_dim
         model_params = dataset_params.Models[model_name]
@@ -83,7 +84,20 @@ class Model(TemplateModel):
             model = Attnet(cfg, input_dim)
             # if model_params.weight_std:
             #     torch.nn.init.normal_(model.weight, mean=0, std=model_params.weight_std)
-            optimizer = optim.SGD(model.parameters(), lr=5e-4, weight_decay=0.005, momentum=0.9, nesterov=True)
+            optimizer = optim.SGD(model.parameters(), 
+                                    lr=model_params.lr, 
+                                    weight_decay=model_params.weight_decay, 
+                                    momentum=model_params.momentum, 
+                                    nesterov=model_params.nesterov)
+        elif model_name == 'sa_abmilp':
+            model = SA_ABMILP(cfg, input_dim, self.device)
+            # if model_params.weight_std:
+            #     torch.nn.init.normal_(model.weight, mean=0, std=model_params.weight_std)
+            optimizer = optim.SGD(model.parameters(), 
+                                    lr=model_params.lr, 
+                                    weight_decay=model_params.weight_decay, 
+                                    momentum=model_params.momentum, 
+                                    nesterov=model_params.nesterov)
         elif model_name == 'minet':
             model = MiNet(cfg, input_dim, pooling_mode=model_params.pooling_mode)
             # optim.Adam(self.model.parameters(), lr=cfg[args.model].lr)
@@ -186,7 +200,7 @@ class Model_with_embs(TemplateModel):
         model_params = dataset_params.Models[self.args.model]
 
         if self.args.model == 'flvnet':
-            model = FLV(cfg, input_dim, base_model=self.args.base_model, pooling_mode=model_params.pooling_mode, num_references=len(self.embeddings[1]))
+            model = FLV(cfg, input_dim, self.args.base_model, self.device, pooling_mode=model_params.pooling_mode, num_references=len(self.embeddings[1]))
             optimizer = optim.SGD(model.parameters(), 
                                     lr=model_params.lr, 
                                     weight_decay=model_params.weight_decay, 

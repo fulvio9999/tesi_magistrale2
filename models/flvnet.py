@@ -5,7 +5,7 @@ from models.MI_net import MINet
 from utils.utils import Score_pooling
 
 class FLV(nn.Module):
-    def __init__(self, cfg, input_dim, base_model, output_dim=1, num_references=100, pooling_mode='max'):
+    def __init__(self, cfg, input_dim, base_model, device, output_dim=1, num_references=100, pooling_mode='max'):
         super(FLV, self).__init__()
 
         seed = cfg.General.seed
@@ -24,7 +24,7 @@ class FLV(nn.Module):
         # self.fcv = nn.Linear(input_dim, 32)
         self.num_references=num_references
         self.base_model = base_model
-        self.self_att = SelfAttention(self.dim_emb)
+        self.self_att = SelfAttention(self.dim_emb, device)
         self.fc = nn.Linear(self.dim_emb, output_dim)
 
     def forward(self, x, tr_bags, tr_mask):
@@ -70,18 +70,16 @@ class FLV(nn.Module):
         return emb
     
 class SelfAttention(nn.Module):
-    def __init__(self, in_dim):
+    def __init__(self, in_dim, device):
         super(SelfAttention, self).__init__()
         self.query_conv = nn.Conv1d(in_channels=in_dim, out_channels=in_dim // 8, kernel_size=1)
         self.key_conv = nn.Conv1d(in_channels=in_dim, out_channels=in_dim // 8, kernel_size=1)
         # self.query_conv = nn.Conv1d(in_channels=in_dim, out_channels=in_dim, kernel_size=1)
         # self.key_conv = nn.Conv1d(in_channels=in_dim, out_channels=in_dim, kernel_size=1)
         self.value_conv = nn.Conv1d(in_channels=in_dim, out_channels=in_dim, kernel_size=1)
-        # self.gamma = nn.Parameter((torch.zeros(1)).cuda())
-        self.gamma = nn.Parameter(torch.zeros(1))
+        self.gamma = nn.Parameter((torch.zeros(1)).to(device))
         self.softmax = nn.Softmax(dim=-1)
-        # self.gamma_att = nn.Parameter((torch.ones(1)).cuda())
-        self.gamma_att = nn.Parameter(torch.ones(1))
+        self.gamma_att = nn.Parameter((torch.ones(1)).to(device))
 
     def forward(self, q, x):
         x = x.view(1, x.shape[0], x.shape[1]).permute((0, 2, 1))

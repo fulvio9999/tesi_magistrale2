@@ -19,10 +19,10 @@ parser.add_argument('--run', type=int, default=5, metavar='N',
                     help='number of run (default: 5)')
 # parser.add_argument('--seed', type=int, default=1, metavar='S',
 #                     help='random seed (default: 1)')
-parser.add_argument('--no-cuda', action='store_true', default=True,
+parser.add_argument('--no-cuda', action='store_true', default=False,
                     help='disables CUDA training')
 parser.add_argument('--config', default='settings.yaml',type=str)
-parser.add_argument('--model', type=str, default='minet', help='Choose b/w minet, MI_net, attnet')
+parser.add_argument('--model', type=str, default='minet', help='Choose b/w minet, MI_net, attnet, sa_abmilp')
 parser.add_argument('--dataset', type=str, default='elephant', help='Choose b/w elephant, fox, tiger, musk1, musk2, messidor')
 parser.add_argument('--eval-per-epoch', type=int, default=0, 
                     help='Choose 0 if you do not want to save the best model, otherwise choose the number of times per epoch you want to save the best model')

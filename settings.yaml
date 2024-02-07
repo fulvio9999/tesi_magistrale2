@@ -37,6 +37,13 @@ Data:
         nesterov: False
         criterion: neg-log-likelihood
         ckpt_dir: checkpoint/elephant/attnet
+      sa_abmilp:
+        lr: 0.0001
+        weight_decay: 0.005
+        momentum: 0.9
+        nesterov: False
+        criterion: neg-log-likelihood
+        ckpt_dir: checkpoint/elephant/attnet
       flvnet:
         lr: 0.0001
         weight_decay: 0.005
@@ -66,6 +73,13 @@ Data:
         ckpt_dir: checkpoint/fox/MI_net
         pooling_mode: max #max, lse, ave
       attnet:
+        lr: 0.0005
+        weight_decay: 0.005
+        momentum: 0.9
+        nesterov: False
+        criterion: neg-log-likelihood
+        ckpt_dir: checkpoint/fox/attnet
+      sa_abmilp:
         lr: 0.0005
         weight_decay: 0.005
         momentum: 0.9
@@ -107,6 +121,13 @@ Data:
         nesterov: False
         criterion: neg-log-likelihood
         ckpt_dir: checkpoint/tiger/attnet
+      sa_abmilp:
+        lr: 0.0001
+        weight_decay: 0.01
+        momentum: 0.9
+        nesterov: False
+        criterion: neg-log-likelihood
+        ckpt_dir: checkpoint/tiger/attnet
       flvnet:
         lr: 0.0001
         weight_decay: 0.01
@@ -136,6 +157,13 @@ Data:
         ckpt_dir: checkpoint/musk1/MI_net
         pooling_mode: max #max, lse, ave
       attnet:
+        lr: 0.0005
+        weight_decay: 0.005
+        momentum: 0.9
+        nesterov: False
+        criterion: neg-log-likelihood
+        ckpt_dir: checkpoint/musk1/attnet
+      sa_abmilp:
         lr: 0.0005
         weight_decay: 0.005
         momentum: 0.9
@@ -177,6 +205,13 @@ Data:
         nesterov: False
         criterion: neg-log-likelihood
         ckpt_dir: checkpoint/musk2/attnet
+      sa_abmilp:
+        lr: 0.0005
+        weight_decay: 0.03
+        momentum: 0.9
+        nesterov: False
+        criterion: neg-log-likelihood
+        ckpt_dir: checkpoint/musk2/attnet
       flvnet:
         lr: 0.0005
         weight_decay: 0.03
@@ -206,6 +241,14 @@ Data:
         ckpt_dir: checkpoint/messidor/MI_net
         pooling_mode: max #max, lse, ave
       attnet:
+        lr: 0.0005
+        weight_decay: 0.001
+        momentum: 0.9
+        nesterov: False
+        criterion: neg-log-likelihood
+        ckpt_dir: checkpoint/messidor/attnet
+        # weight_std: 0.05
+      sa_abmilp:
         lr: 0.0005
         weight_decay: 0.001
         momentum: 0.9
