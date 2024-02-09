@@ -128,7 +128,7 @@ class Model(TemplateModel):
         best_model.load_state(self.best_model_path)
         return best_model
 
-    def get_training_features(self):
+    def get_training_features(self, x=None):
         self.model.eval()
 
         tr_bags = []
@@ -136,15 +136,20 @@ class Model(TemplateModel):
         tr_mask = []
         
         with torch.no_grad():
-            for batch_idx, batch in enumerate(self.train_loader):
-                x, y = batch
-                y = y[0] #BYFLV
+            if x is not None:
                 x = x.to(self.device)
-                y = y.to(self.device)
                 _, emb = self.model(x)
                 tr_bags.append(emb)
-                tr_labels.append(y)
-                tr_mask += [batch_idx for i in range(x.shape[1])]
+            else:
+                for batch_idx, batch in enumerate(self.train_loader):
+                    x, y = batch
+                    y = y[0] #BYFLV     
+                    x = x.to(self.device)
+                    y = y.to(self.device)
+                    _, emb = self.model(x)
+                    tr_bags.append(emb)
+                    tr_labels.append(y)
+                    tr_mask += [batch_idx for i in range(x.shape[1])]
         return (tr_bags, tr_labels, tr_mask)
 
 

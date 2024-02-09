@@ -28,7 +28,9 @@ class FLV(nn.Module):
         self.fc = nn.Linear(self.dim_emb, output_dim)
 
     def forward(self, x, tr_bags, tr_mask):
-        # emb = self.base_model.calculate_embedding2(x).unsqueeze(0) #1x64
+        # emb2 = self.base_model.calculate_embedding2(x).unsqueeze(0) #1x64
+        # emb2 = self.base_model.get_training_features()[0]
+
         emb2 = self.calculate_embedding3(x).unsqueeze(0) #1x64
         tr_bags_tensor = torch.stack(tr_bags, dim=0) #num_refs x 64
 

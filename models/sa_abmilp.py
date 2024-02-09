@@ -83,9 +83,10 @@ class SA_ABMILP(nn.Module):
         A = F.softmax(A, dim=1)  # softmax over N
 
         M = torch.mm(A, H)  # KxL
-        emb = M
+        emb = M.squeeze()
 
         Y_prob = self.classifier(M).squeeze()
+        Y_prob = torch.clamp(Y_prob, min=1e-5, max=1. - 1e-5)
         # Y_hat = torch.ge(Y_prob, 0.5).float()
         return Y_prob, emb
 
