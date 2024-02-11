@@ -12,6 +12,7 @@ from utils.utils import load_checkpoint, read_yaml, save_checkpoint, save_result
 
 # Training settings
 parser = argparse.ArgumentParser(description='FLV')
+parser.add_argument('description', type=str, help='Write a summary description of the experiment without spaces')
 parser.add_argument('--epochs', type=int, default=50, metavar='N',
                     help='number of epochs to train (default: 50)')
 parser.add_argument('--folds', type=int, default=10, metavar='N',
@@ -41,10 +42,11 @@ if args.cuda:
     torch.cuda.manual_seed(seed)
     print('\nGPU is ON!')
 
-ckpt_dir = cfg.Data[args.dataset].Models[args.model].ckpt_dir
+ckpt_dir = osp.join(cfg.General.ckpt_dir, args.dataset, args.description, args.model)
 ckpt_file = osp.join(ckpt_dir, 'accs.tar')
-ckpt_dir_flv = cfg.Data[args.dataset].Models['flvnet'].ckpt_dir
+ckpt_dir_flv = osp.join(cfg.General.ckpt_dir, args.dataset, args.description, 'flvnet')
 ckpt_file_flv = osp.join(ckpt_dir_flv, 'accs.tar')
+results_dir = osp.join(cfg.General.results_dir, args.dataset, args.description)
 
 if __name__ == "__main__":   
     # accs_base = np.zeros((args.run, args.folds), dtype=float)
@@ -90,8 +92,8 @@ if __name__ == "__main__":
 
     os.remove(ckpt_file)   
     os.remove(ckpt_file_flv) 
-    save_results(accs_base, cfg.General.results_dir, args.dataset, args.model)
-    save_results(accs, cfg.General.results_dir, args.dataset, 'flvnet')
+    save_results(accs_base, results_dir, args.model)
+    save_results(accs, results_dir, 'flvnet')
 
     
 

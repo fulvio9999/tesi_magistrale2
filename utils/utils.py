@@ -1,5 +1,6 @@
 #---->read yaml
 import csv
+import os
 import yaml
 from addict import Dict
 import numpy as np
@@ -18,7 +19,10 @@ def write_results(accs):
     import numpy as np
 import csv
 
-def save_results(accuracy_matrix, results_dir, dataset, model):
+def save_results(accuracy_matrix, results_dir, model):
+    if not osp.exists(results_dir):
+        os.mkdir(results_dir)
+        
     accuracy_matrix = np.round(accuracy_matrix, 3)
     run = accuracy_matrix.shape[0]
     run_means = np.round(np.mean(accuracy_matrix, axis=1), 3)
@@ -31,8 +35,8 @@ def save_results(accuracy_matrix, results_dir, dataset, model):
     final_matrix = np.column_stack((accuracy_matrix_with_fold_std, run_std))
     column_labels = [f"Fold_{i+1}" for i in range(accuracy_matrix.shape[1])] + ["Acc_run_mean", "Acc_run_std"]
 
-    path = osp.join(results_dir, dataset)
-    csv_file_path = osp.join(path, model+".csv")
+    # path = osp.join(results_dir, dataset)
+    csv_file_path = osp.join(results_dir, model+".csv")
     with open(csv_file_path, 'w', newline='') as csvfile:
         writer = csv.writer(csvfile)
         writer.writerow(column_labels)
@@ -46,7 +50,7 @@ def save_results(accuracy_matrix, results_dir, dataset, model):
     acc_mean = np.round(np.mean(accuracy_matrix), 3)
     acc_std = np.round(np.std(accuracy_matrix), 3)
 
-    txt_file_path = osp.join(path, model+".txt")
+    txt_file_path = osp.join(results_dir, model+".txt")
     with open(txt_file_path, "w") as file:
         file.write(f"ACCURACY MEAN: {acc_mean}\nACCURACY STD: {acc_std}")
 

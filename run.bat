@@ -1,16 +1,21 @@
 @echo off
 setlocal
 
-if not "%~1"=="--model" (
-    echo Usage: %~nx0 ^<--model model_value^> [--dataset dataset_value] [other_parameters]
+if "%~1"=="" (
+    echo Usage: %~nx0 ^<description_value^> ^<--model model_value^> [--dataset dataset_value] [other_parameters]
     exit /b 1
 )
+set "description=%~1"
 
-set "model=%~2"
+if not "%~2"=="--model" (
+    echo Usage: %~nx0 ^<description_value^> ^<--model model_value^> [--dataset dataset_value] [other_parameters]
+    exit /b 1
+)
+set "model=%~3"
 
-if "%~1" == "--dataset" (
-    echo CIAOOO
-    set "datasets=%2"
+if "%~4" == "--dataset" (
+    echo Datset inserito
+    set "datasets=%5"
     set "default=False"
 ) else (
     set "datasets=elephant tiger fox musk1 musk2 messidor"
@@ -24,7 +29,6 @@ if "%default%" == "False" (
     for %%d in (%datasets%) do (
         echo.
         echo Running on dataset %%d --------------------------------------------------------:
-        python main.py --dataset="%%d" %*
+        python main.py %* --dataset="%%d"
     )
 )
-

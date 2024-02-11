@@ -1,3 +1,4 @@
+import os
 import torch
 import torch.optim as optim
 from models.flvnet import FLV
@@ -63,13 +64,19 @@ class Model(TemplateModel):
         self.test_loader = args.test_loader
 
         # self.ckpt_dir = cfg.Models[args.model].ckpt_dir
-        self.ckpt_dir = cfg.Data[args.dataset].Models[args.model].ckpt_dir
+        # self.ckpt_dir = cfg.Data[args.dataset].Models[args.model].ckpt_dir
+        # self.ckpt_dir = osp.join(cfg.General.ckpt_dir, args.dataset, args.model)
+        self.ckpt_dir = osp.join(cfg.General.ckpt_dir, args.dataset, args.description)
+        if not osp.exists(self.ckpt_dir):
+            os.mkdir(self.ckpt_dir)
+        self.ckpt_dir = osp.join(self.ckpt_dir, args.model)
+        
         self.log_per_step = cfg.General.log_per_step
         # self.eval_per_epoch = cfg.General.eval_per_epoch
         self.eval_per_epoch = args.eval_per_epoch
 
         # self.best_model_path = cfg.Models[args.model].ckpt_dir + '/best.pth.tar'
-        self.best_model_path = osp.join(cfg.Data[args.dataset].Models[args.model].ckpt_dir, 'best.pth.tar')
+        self.best_model_path = osp.join(self.ckpt_dir, 'best.pth.tar')
 
         self.check_init()
 
@@ -188,13 +195,19 @@ class Model_with_embs(TemplateModel):
         self.test_loader = args.test_loader
 
         # self.ckpt_dir = cfg.Models[args.model].ckpt_dir
-        self.ckpt_dir = cfg.Data[args.dataset].Models[args.model].ckpt_dir
+        # self.ckpt_dir = cfg.Data[args.dataset].Models[args.model].ckpt_dir
+        # self.ckpt_dir = osp.join(cfg.General.ckpt_dir, args.dataset, args.model)
+        self.ckpt_dir = osp.join(cfg.General.ckpt_dir, args.dataset, args.description)
+        if not osp.exists(self.ckpt_dir):
+            os.mkdir(self.ckpt_dir)
+        self.ckpt_dir = osp.join(self.ckpt_dir, args.model)
+            
         self.log_per_step = cfg.General.log_per_step
         # self.eval_per_epoch = cfg.General.eval_per_epoch
         self.eval_per_epoch = args.eval_per_epoch
 
         # self.best_model_path = cfg.Models[args.model].ckpt_dir + '/best.pth.tar'
-        self.best_model_path = osp.join(cfg.Data[args.dataset].Models[args.model].ckpt_dir, 'best.pth.tar')
+        self.best_model_path = osp.join(self.ckpt_dir, 'best.pth.tar')
 
         self.check_init()
     
