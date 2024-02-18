@@ -59,7 +59,7 @@ class Attnet(nn.Module):
         A = F.softmax(A, dim=1)  # softmax over K
 
         Z = torch.mm(A, H)  # ATTENTION_BRANCHESxM
-        emb = Z
+        emb = Z.squeeze()
 
         Y_prob = self.classifier(Z).squeeze()
         Y_prob = torch.clamp(Y_prob, min=1e-5, max=1. - 1e-5)
