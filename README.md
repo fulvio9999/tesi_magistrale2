@@ -63,33 +63,33 @@ pip install -r requirements.txt
 
 #### mi-net (https://arxiv.org/abs/1610.02501):
 ```python
-python main.py --model=minet --dataset=elephant
-python main.py --model=minet --dataset=fox
-python main.py --model=minet --dataset=tiger
-python main.py --model=minet --dataset=musk1
-python main.py --model=minet --dataset=musk2
-python main.py --model=minet --dataset=newsgroup
-python main.py --model=minet --dataset=messidor
+python main.py test_description --model=minet --dataset=elephant
+python main.py test_description --model=minet --dataset=fox
+python main.py test_description --model=minet --dataset=tiger
+python main.py test_description --model=minet --dataset=musk1
+python main.py test_description --model=minet --dataset=musk2
+python main.py test_description --model=minet --dataset=newsgroups
+python main.py test_description --model=minet --dataset=messidor
 ```
 #### MI-net (https://arxiv.org/abs/1610.02501):
 ```python
-python main.py --model=MInet --dataset=elephant
-python main.py --model=MInet --dataset=fox
-python main.py --model=MInet --dataset=tiger
-python main.py --model=MInet --dataset=musk1
-python main.py --model=MInet --dataset=musk2
-python main.py --model=MInet --dataset=newsgroup
-python main.py --model=MInet --dataset=messidor
+python main.py test_description --model=MInet --dataset=elephant
+python main.py test_description --model=MInet --dataset=fox
+python main.py test_description --model=MInet --dataset=tiger
+python main.py test_description --model=MInet --dataset=musk1
+python main.py test_description --model=MInet --dataset=musk2
+python main.py test_description --model=MInet --dataset=newsgroups
+python main.py test_description --model=MInet --dataset=messidor
 ```
 #### Att-net (https://arxiv.org/abs/1802.04712):
 ```python
-python main.py --model=attnet --dataset=elephant
-python main.py --model=attnet --dataset=fox
-python main.py --model=attnet --dataset=tiger
-python main.py --model=attnet --dataset=musk1
-python main.py --model=attnet --dataset=musk2
-python main.py --model=attnet --dataset=newsgroup
-python main.py --model=attnet --dataset=messidor
+python main.py test_description --model=attnet --dataset=elephant
+python main.py test_description --model=attnet --dataset=fox
+python main.py test_description --model=attnet --dataset=tiger
+python main.py test_description --model=attnet --dataset=musk1
+python main.py test_description --model=attnet --dataset=musk2
+python main.py test_description --model=attnet --dataset=newsgroups
+python main.py test_description --model=attnet --dataset=messidor
 ```
 ##### Default values:
 ```python

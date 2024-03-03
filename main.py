@@ -24,13 +24,13 @@ parser.add_argument('--no-cuda', action='store_true', default=False,
                     help='disables CUDA training')
 parser.add_argument('--config', default='settings.yaml',type=str)
 parser.add_argument('--model', type=str, default='minet', help='Choose b/w minet, MI_net, attnet, sa_abmilp')
-parser.add_argument('--dataset', type=str, default='elephant', help='Choose b/w elephant, fox, tiger, musk1, musk2, messidor')
+parser.add_argument('--dataset', type=str, default='elephant', help='Choose b/w elephant, fox, tiger, musk1, musk2, newsgroups, messidor')
 parser.add_argument('--eval-per-epoch', type=int, default=0, 
                     help='Choose 0 if you do not want to save the best model, otherwise choose the number of times per epoch you want to save the best model')
 
 args = parser.parse_args()
 args.cuda = not args.no_cuda and torch.cuda.is_available()
-
+# args.description = "test_newsgroups_main"
 assert args.config
 cfg = read_yaml(args.config)
 seed = cfg.General.seed
@@ -41,16 +41,12 @@ if args.cuda:
     torch.cuda.manual_seed(seed)
     print('\nGPU is ON!')
 
-ckpt_dir = osp.join(cfg.General.ckpt_dir, args.dataset, args.description, args.model)
-ckpt_file = osp.join(ckpt_dir, 'accs.tar')
-results_dir = osp.join(cfg.General.results_dir, args.dataset, args.description)
-
-if __name__ == "__main__":   
+def main():   
     # accs = np.zeros((args.run, args.folds), dtype=float)
     accs, curr_run, curr_fold = load_checkpoint(args.run, args.folds, ckpt_file)
     seeds = [seed+i*5 for i in range(args.run)]
     for irun in range(curr_run, args.run):
-        dataset = load_dataset(args, seeds[irun])
+        dataset = load_dataset(args, seeds[irun], cfg)
         for ifold in range(curr_fold, args.folds):
             print(f"\nRUN {irun+1}/{args.run}\t FOLD {ifold+1}/{args.folds}: ----------------------------------------")
             args.train_loader = convertToBatch(dataset[ifold]['train'])
@@ -70,3 +66,31 @@ if __name__ == "__main__":
 
     os.remove(ckpt_file)
     save_results(accs, results_dir, args.model)
+
+
+if __name__ == "__main__": 
+    if args.dataset == "newsgroups":
+        dir_newsgroups = osp.join(cfg.General.data_dir, cfg.Data[args.dataset].path)
+        for file in os.listdir(dir_newsgroups):
+            file_name = file.split('.')[0]
+            args.newsgroups_file = file_name
+            ckpt_dir = osp.join(cfg.General.ckpt_dir, args.dataset, file_name)
+            if not osp.exists(ckpt_dir):
+                os.mkdir(ckpt_dir)
+            ckpt_file = osp.join(ckpt_dir, args.description, args.model, 'accs.tar')
+            
+            results_dir = osp.join(cfg.General.results_dir, args.dataset, file_name)
+            if not osp.exists(results_dir):
+                os.mkdir(results_dir)
+            results_dir = osp.join(results_dir, args.description)
+
+            old_path = cfg.Data[args.dataset].path
+            cfg.Data[args.dataset].path = osp.join(cfg.Data[args.dataset].path, file_name)
+            print(f"RUN on NEWSGROUPS: {file_name} -------------------------------------------------------")
+            main()
+            cfg.Data[args.dataset].path = old_path
+    else:
+        ckpt_dir = osp.join(cfg.General.ckpt_dir, args.dataset, args.description, args.model)
+        ckpt_file = osp.join(ckpt_dir, 'accs.tar')
+        results_dir = osp.join(cfg.General.results_dir, args.dataset, args.description)
+        main()
