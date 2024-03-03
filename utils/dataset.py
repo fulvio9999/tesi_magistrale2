@@ -29,7 +29,7 @@ def load_elephant_fox_tiger(args, data, seed):
         datasets.append(dataset)
     return datasets
 
-def load_musk_messidor(args, data, seed):
+def load_musk_newsgroups_messidor(args, data, seed):
     ins_fea = data['x']['data'][0,0]
     if args.dataset.startswith('musk'):
         bags_nm = data['x']['ident'][0,0]['milbag'][0,0]
@@ -65,15 +65,15 @@ def load_musk_messidor(args, data, seed):
     return datasets
 
 
-def load_dataset(args, seed):
-    cfg = read_yaml(args.config)
+def load_dataset(args, seed, cfg):
+    # cfg = read_yaml(args.config)
     assert args.dataset in cfg.Data.keys()
 
     # path = cfg.Data[args.dataset].path
     path = osp.join(cfg.General.data_dir, cfg.Data[args.dataset].path)
     data = scipy.io.loadmat(path)
-    if args.dataset in ('musk1', 'musk2', 'messidor'):
-        return load_musk_messidor(args, data, seed)
+    if args.dataset in ('musk1', 'musk2', 'messidor', 'newsgroups'):
+        return load_musk_newsgroups_messidor(args, data, seed)
     return load_elephant_fox_tiger(args, data, seed)
 
 def convertToBatch(bags):

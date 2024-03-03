@@ -20,19 +20,19 @@ class FLV(nn.Module):
         self.fc = nn.Linear(self.dim_emb, output_dim)
 
     def forward(self, x, tr_bags, tr_mask):
-        # # training from zero
-        # self.base_model.eval()
-        # with torch.no_grad():
-        #     emb2 = self.base_model(x)[1].unsqueeze(0)
+        # training from zero
+        self.base_model.eval()
+        with torch.no_grad():
+            emb2 = self.base_model(x)[1].unsqueeze(0)
 
-        #training from basemodel
-        emb2 = self.base_model(x)[1].unsqueeze(0)
+        # #training from basemodel
+        # emb2 = self.base_model(x)[1].unsqueeze(0)
 
         tr_bags_tensor = torch.stack(tr_bags, dim=0) #num_refs x 64
 
         emb2 = self.self_att(tr_bags_tensor, q = emb2) #1x64
-        emb2 = self.self_att(tr_bags_tensor, q = emb2)
-        emb2 = self.self_att(tr_bags_tensor, q = emb2)
+        # emb2 = self.self_att(tr_bags_tensor, q = emb2)
+        # emb2 = self.self_att(tr_bags_tensor, q = emb2)
 
         Y_prob = torch.sigmoid(self.fc(emb2)).squeeze()
         Y_prob = torch.clamp(Y_prob, min=1e-5, max=1. - 1e-5)
@@ -65,12 +65,19 @@ class SelfAttention(nn.Module):
 
         attention = self.softmax(energy)  # BX (N) X (N)
 
+        # dissimilarity_matrix = 1 / (attention + 1e-8)
+        # attention = torch.softmax(dissimilarity_matrix, dim=1)
+
+        # attention2 = 1-attention
+        # row_sums = torch.sum(attention2, dim=1, keepdim=True)
+        # attention = attention2 / row_sums
+
         proj_value = self.value_conv(x).view(bs, -1, length)  # B X C X N
 
         out = torch.bmm(proj_value, attention.permute(0, 2, 1))
         # out = out.view(bs, C, length)
         out = out.view(bs_q, C_q, length_q)
 
-        # out = self.gamma_att * out + q
-        out = out + q
+        out = self.gamma_att * out + q
+        # out = out + q
         return out[0].permute(1, 0)#, attention, self.gamma, self.gamma_att

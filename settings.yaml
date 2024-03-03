@@ -11,6 +11,43 @@ General:
   data_dir: data
 
 Data:
+  newsgroups:
+    input_dim: 200
+    path: newsgroups
+    Models:
+      minet:
+        lr: 0.0001
+        weight_decay: 0.005
+        momentum: 0.9
+        nesterov: False
+        criterion: binary-cross-entropy
+        pooling_mode: max #max, lse, ave
+      MI_net:
+        lr: 0.0001
+        weight_decay: 0.005
+        momentum: 0.9
+        nesterov: False
+        criterion: binary-cross-entropy
+        pooling_mode: max #max, lse, ave
+      attnet:
+        lr: 0.0001
+        weight_decay: 0.005
+        momentum: 0.9
+        nesterov: False
+        criterion: neg-log-likelihood
+      sa_abmilp:
+        lr: 0.0001
+        weight_decay: 0.005
+        momentum: 0.9
+        nesterov: False
+        criterion: neg-log-likelihood
+      flvnet:
+        lr: 0.0001
+        weight_decay: 0.005
+        momentum: 0.9
+        nesterov: False
+        criterion: binary-cross-entropy
+        pooling_mode: max #max, lse, ave
   elephant:
     input_dim: 230
     path: elephant_100x100_matlab.mat

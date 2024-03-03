@@ -66,7 +66,10 @@ class Model(TemplateModel):
         # self.ckpt_dir = cfg.Models[args.model].ckpt_dir
         # self.ckpt_dir = cfg.Data[args.dataset].Models[args.model].ckpt_dir
         # self.ckpt_dir = osp.join(cfg.General.ckpt_dir, args.dataset, args.model)
-        self.ckpt_dir = osp.join(cfg.General.ckpt_dir, args.dataset, args.description)
+        if args.newsgroups_file is not None:
+            self.ckpt_dir = osp.join(cfg.General.ckpt_dir, args.dataset, args.newsgroups_file, args.description)
+        else:
+            self.ckpt_dir = osp.join(cfg.General.ckpt_dir, args.dataset, args.description)
         if not osp.exists(self.ckpt_dir):
             os.mkdir(self.ckpt_dir)
         self.ckpt_dir = osp.join(self.ckpt_dir, args.model)
@@ -197,7 +200,10 @@ class Model_with_embs(TemplateModel):
         # self.ckpt_dir = cfg.Models[args.model].ckpt_dir
         # self.ckpt_dir = cfg.Data[args.dataset].Models[args.model].ckpt_dir
         # self.ckpt_dir = osp.join(cfg.General.ckpt_dir, args.dataset, args.model)
-        self.ckpt_dir = osp.join(cfg.General.ckpt_dir, args.dataset, args.description)
+        if args.newsgroups_file is not None:
+            self.ckpt_dir = osp.join(cfg.General.ckpt_dir, args.dataset, args.newsgroups_file, args.description)
+        else:
+            self.ckpt_dir = osp.join(cfg.General.ckpt_dir, args.dataset, args.description)
         if not osp.exists(self.ckpt_dir):
             os.mkdir(self.ckpt_dir)
         self.ckpt_dir = osp.join(self.ckpt_dir, args.model)
